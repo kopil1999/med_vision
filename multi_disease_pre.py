@@ -52,18 +52,38 @@ def progress_bar(text):
 
 
 
+@st.cache_resource(ttl=3600,show_spinner="Loading image classification model...")
+def load_img_cls_model():
+	#   return pickle.load(open('C:/Users/A S U S/Desktop/med_vision/Pre-trained_models/image_classifying_preTrained_model.sav','rb'))
+	  return pickle.load(open('Pre-trained_models/image_classifying_preTrained_model.sav','rb'))
 
-Pneumonia_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/pneumonia-disease-pretrained-mode.sav','rb'))
+image_classification_model = load_img_cls_model()
 
-eye_disease_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/eye-disease-pretrained-mode.sav','rb'))
+@st.cache_resource(ttl=3600,show_spinner="Loading CNN model...")
+def load_cnn_p_model():
+	#   return load_model('C:/Users/A S U S/Desktop/med_vision/Pre-trained_models/cnn_pneumonia_h5_v02.h5')
+	  return load_model('Pre-trained_models/cnn_pneumonia_h5_v02.h5')
 
-image_classification_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/image_classifying_preTrained_model.sav','rb'))
+cnn_pneumonia_model = load_cnn_p_model()
 
-cnn_pneumonia_model = load_model('C:/Users/A S U S/OneDrive/Desktop/Multi_disease_prediction/Pre-trained_models/cnn_pneumonia_h5_v02.h5')
+
+
+
+
+# Pneumonia_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/pneumonia-disease-pretrained-mode.sav','rb'))
+
+# eye_disease_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/eye-disease-pretrained-mode.sav','rb'))
+
+# image_classification_model = pickle.load(open('C:/Users/A S U S/Desktop/med_vision/Pre-trained_models/image_classifying_preTrained_model.sav','rb'))
+
+# cnn_pneumonia_model = load_model('C:/Users/A S U S/Desktop/med_vision/Pre-trained_models/cnn_pneumonia_h5_v02.h5')
 
 # cnn_eye_disease_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/CNN-Eye_disease.sav','rb'))
 
-naive_bayes_pneumonia_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/naive_bayes_model_v5_pneumonia.sav','rb'))
+# naive_bayes_pneumonia_model = pickle.load(open('C:/Users/A S U S/MultiDisease_predict/Pre-trained_models/naive_bayes_model_v5_pneumonia.sav','rb'))
+
+
+
 
 # models prediction function
 # image classification model
@@ -116,6 +136,8 @@ def predict_pneumonia(image_path, model):
     # predicted_class = predicted_class.item()
 
     # return predicted_class
+
+
 
 # eye-disease prediction using transfer learning
 def predict_eye_disease_tf(image_path, model):
@@ -176,13 +198,15 @@ def predict_eye_disease_using_CNN(image_path,model):
 
 
 def predict_pneumonia_using_Naive_Bayes(image_path,model):
-    img = Image.open(image_path).convert('L')  # Convert to grayscale
-    img_resized = img.resize((128, 128))  # Resize for consistency
-    img_array = np.array(img_resized)
-    img_flat = img_array.flatten()
+    pass
+    # img = Image.open(image_path).convert('L')  # Convert to grayscale
+    # img_resized = img.resize((128, 128))  # Resize for consistency
+    # img_array = np.array(img_resized)
+    # img_flat = img_array.flatten()
 
-    prediction = model.predict([img_flat])
-    return prediction
+    # prediction = model.predict([img_flat])
+    # return prediction
+
 
 
 
@@ -208,7 +232,7 @@ def load_pneumonia_cnn_model():
         # if st.session_state["check_button"] =="clicked":
         #     st.image(chest_x_ray_image, caption='Uploaded Image.')
         if st.session_state.clicked:
-            time.sleep(2)
+            time.sleep(3.5)
             st.image(chest_x_ray_image, caption='Uploaded Image.')
             btn = st.button("Check Prediction again")
         else:
@@ -242,6 +266,9 @@ def load_pneumonia_cnn_model():
 
 def load_pneumonia_transfer_learning_model():
     st.write("##### Transfer Learning Model useses DenseNet161 pretrained model")
+    st.write("### Right now We're unable to load this model.")
+    st.write("### Due to free low memory resources in cloud.")
+    st.write("### Stay tuned for our update.")
     # Load transfer learning model and perform predictions
     # chest_x_ray_image = st.file_uploader('Please uploade your chest x-ray image',type=['jpeg','png','jpg'])
     # if chest_x_ray_image is not None:
@@ -266,48 +293,51 @@ def load_pneumonia_transfer_learning_model():
 
 def load_pneumonia_naive_bayes_model():
     st.write("# Pneumonia Naive Bayes Model")
+    st.write("### Right now We're unable to load this model.")
+    st.write("### Due to free low memory resources in cloud.")
+    st.write("### Stay tuned for our update.")
     # Load Kopil's CNN model and perform predictions
-    btn=False
-    btn_text="check prediction"
-    chest_x_ray_image = st.file_uploader('Please upload your chest x-ray image', type=['jpeg', 'png', 'jpg'], on_change=change_photo_state)
+    # btn=False
+    # btn_text="check prediction"
+    # chest_x_ray_image = st.file_uploader('Please upload your chest x-ray image', type=['jpeg', 'png', 'jpg'], on_change=change_photo_state)
     
-    if chest_x_ray_image is not None:
-        if st.session_state["photo"] == "done":
-            text = "Image uploading in progress. Please wait..."
-            progress_bar(text)
-            st.image(chest_x_ray_image, caption='Uploaded Image.')
-            st.session_state["photo"] ="image uploaded"
+    # if chest_x_ray_image is not None:
+    #     if st.session_state["photo"] == "done":
+    #         text = "Image uploading in progress. Please wait..."
+    #         progress_bar(text)
+    #         st.image(chest_x_ray_image, caption='Uploaded Image.')
+    #         st.session_state["photo"] ="image uploaded"
            
-        # if st.session_state["check_button"] =="clicked":
-        #     st.image(chest_x_ray_image, caption='Uploaded Image.')
-        if st.session_state.clicked:
-            time.sleep(2)
-            st.image(chest_x_ray_image, caption='Uploaded Image.')
-            btn = st.button("Check Prediction again")
-        else:
-            btn = st.button("Check Prediction",on_click=click_button)
+    #     # if st.session_state["check_button"] =="clicked":
+    #     #     st.image(chest_x_ray_image, caption='Uploaded Image.')
+    #     if st.session_state.clicked:
+    #         time.sleep(2)
+    #         st.image(chest_x_ray_image, caption='Uploaded Image.')
+    #         btn = st.button("Check Prediction again")
+    #     else:
+    #         btn = st.button("Check Prediction",on_click=click_button)
 
         
-        if st.session_state.clicked:
-            predict_image_class = pre_img_class(chest_x_ray_image, image_classification_model)
-            # checking image class whether it is chest X-ray image
-            btn_text="check prediction again"
-            text = "Operation in progress. Please wait for predicted value..."
-            progress_bar(text)
+    #     if st.session_state.clicked:
+    #         predict_image_class = pre_img_class(chest_x_ray_image, image_classification_model)
+    #         # checking image class whether it is chest X-ray image
+    #         btn_text="check prediction again"
+    #         text = "Operation in progress. Please wait for predicted value..."
+    #         progress_bar(text)
 
-            if predict_image_class == 0:
-                # Predict the class Pneumonia or normal
-                predicted_class = predict_pneumonia_using_Naive_Bayes(chest_x_ray_image, naive_bayes_pneumonia_model)
+    #         if predict_image_class == 0:
+    #             # Predict the class Pneumonia or normal
+    #             predicted_class = predict_pneumonia_using_Naive_Bayes(chest_x_ray_image, naive_bayes_pneumonia_model)
                 
-                if predicted_class[0] == 1:
-                    st.error('The image is predicted as Pneumonia.')
-                else:
-                    st.success('The image is predicted as Normal.')
-                st.snow()
-            else:
-                st.warning("Unable to determine the prediction. Because uploaded image is not chest X-ray image.")
-    else:
-        st.warning('Please upload a chest x-ray image.')
+    #             if predicted_class[0] == 1:
+    #                 st.error('The image is predicted as Pneumonia.')
+    #             else:
+    #                 st.success('The image is predicted as Normal.')
+    #             st.snow()
+    #         else:
+    #             st.warning("Unable to determine the prediction. Because uploaded image is not chest X-ray image.")
+    # else:
+    #     st.warning('Please upload a chest x-ray image.')
 
 
 
@@ -315,6 +345,9 @@ def load_pneumonia_naive_bayes_model():
 
 def load_eye_disease_cnn_model():
     st.write("##### CNN Model uses pretrained model")
+    st.write("### Right now We're unable to load this model.")
+    st.write("### Due to free low memory resources in cloud.")
+    st.write("### Stay tuned for our update.")
     # Loading cnn model and perform predictions
     # eye_disease_image = st.file_uploader('Please uploade your eye-disease image',type=['jpeg','png','jpg'])
     # if eye_disease_image is not None:
@@ -341,7 +374,10 @@ def load_eye_disease_cnn_model():
 
 
 def load_eye_disease_transfer_learning_model():
-    st.write("##### Transfer Learning Model useses DenseNet161 pretrained model")
+    st.write("##### Transfer Learning Model uses DenseNet161 pretrained model")
+    st.write("### Right now We're unable to load this model.")
+    st.write("### Due to free low memory resources in cloud.")
+    st.write("### Stay tuned for our update.")
     # Load your transfer learning model and perform predictions
     # eye_disease_image = st.file_uploader('Please uploade your eye-disease image',type=['jpeg','png','jpg'])
     # if eye_disease_image is not None:
@@ -368,14 +404,18 @@ def load_eye_disease_transfer_learning_model():
 
 
 def load_eye_disease_naive_bayes_model():
-    # st.write("# Eye Disease Naive Bayes Model Code\n# Your Naive Bayes code here")
+    st.write("# Eye Disease Naive Bayes Model")
+    st.write("### Right now We're unable to load this model.")
+    st.write("### Due to free low memory resources in cloud.")
+    st.write("### Stay tuned for our update.")
     # Load Kopil's your naive bayes model and perform predictions
     pass
 
 # navigation bar
+# home page's code
 # styling title
 st.markdown("<style>h2{ color: white;text-shadow: 2px 2px 5px #000000;letter-spacing: 3px;word-spacing: 10px; }</style>", unsafe_allow_html=True)
-st.markdown("<u><h2>X-ray and Eye Disease Image Prediction System</h2></u>", unsafe_allow_html=True)
+st.markdown("<u><h2>Pneumonia and Eye Disease Recognition System</h2></u>", unsafe_allow_html=True)
 
 selected_disease = st.sidebar.selectbox('Select Disease', ['Pneumonia', 'Eye disease'])
 
